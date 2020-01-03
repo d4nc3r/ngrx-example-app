@@ -1,0 +1,34 @@
+<div class="m-3">
+  <h3>Welcome to your To Do list!</h3>
+  <div class="form-group mt-3">
+    <label for="item">Item that needs doing:</label>
+    <input class="form-control"
+           id="item"
+           #item>
+    <input type="button"
+           class="btn btn-primary mt-2"
+           (click)=add(item)
+           value="Add">
+  </div>
+
+  <section>
+    <h4>Do these things:</h4>
+    <input type="button"
+           class="btn btn-success"
+           value="load todos"
+           (click)="loadList()">
+    <ul class="list-unstyled mt-4">
+      <li *ngFor="let todo of todoList"
+          class="alert alert-info">
+        {{todo.description}}
+        <button type="button"
+                (click)="remove(todo)"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Remove">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </li>
+    </ul>
+  </section>
+</div>
