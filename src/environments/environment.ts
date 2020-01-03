@@ -5,7 +5,7 @@ import { Environment } from './models';
 
 export const environment: Environment = {
   production: false,
-  todosUrl: 'http://localhost:3000'
+  todosUrl: 'http://localhost:3000/todos'
 };
 
 /*

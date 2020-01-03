@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { TodoEntity } from './reducers/list.reducer';
+import { Store } from '@ngrx/store';
+import { TodoState, selectAllTodos } from './reducers';
+import * as listActions from './actions/list.actions';
 
 const fakeTodos = [
   { id: '1', description: 'Change kitty litter', completed: false },
@@ -12,37 +17,24 @@ const fakeTodos = [
   styleUrls: ['./todo.component.scss']
 })
 export class TodoComponent implements OnInit {
-  todoList: Todo[] = [];
-  itemIndex = 4;
+  todoList$: Observable<TodoEntity[]>;
 
-  constructor() { }
+  constructor(private store: Store<TodoState>) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.todoList$ = this.store.select(selectAllTodos);
+  }
 
   loadList() {
-    this.todoList = [...fakeTodos];
+    this.store.dispatch(listActions.loadItems());
   }
 
   add(item: HTMLInputElement) {
-    const newItem = {
-      id: 'T' + this.itemIndex++,
-      description: item.value,
-      completed: false
-    };
-    this.todoList.push(newItem);
+    this.store.dispatch(listActions.addListItem({ description: item.value }));
   }
 
-  remove(itemToRemove: Todo) {
-    const filteredList =
-      this.todoList.filter(todo => todo.id !== itemToRemove.id);
-
-    this.todoList = [...filteredList];
+  remove(itemToRemove: TodoEntity) {
+    this.store.dispatch(listActions.removeListItem({ payload: itemToRemove }));
   }
 
-}
-
-interface Todo {
-  id: string;
-  description: string;
-  completed: boolean;
 }
